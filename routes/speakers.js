@@ -2,12 +2,15 @@ const express = require('express');
 
 const router = express.Router();
 
-module.exports = () => {
-  router.get('/', (request, response) => {
-    //response.sendFile(path.join(__dirname, './provided/static/index.html'));
-    //response.render('pages/index', { pageTitle: 'Welcome' });
+module.exports = (params) => {
+  const speakersService = params.speakersService;
+  router.get('/', async (request, response) => {
+    const speakers = await speakersService.getList();
+    return response.json(speakers);
+  });
 
-    return response.send('Speakers List');
+  router.get('/:shortname', (request, response) => {
+    return response.send(`Detail Page of ${request.params.shortname}`);
   });
 
   return router;
